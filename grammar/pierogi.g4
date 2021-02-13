@@ -1,8 +1,13 @@
 grammar pierogi;
 
-expr					: expr PLUS expr
-						| NUMBER;
+expr					: NUMBER PLUS NUMBER
+						| NUMBER PLUS paren_expr
+						| paren_expr PLUS NUMBER
+						| paren_expr PLUS paren_expr;
+paren_expr				: LPAREN expr RPAREN;
 
-PLUS					: '+' ;
-NUMBER					: [0-9]+;
+PLUS					: '+';
+LPAREN					: '(';
+RPAREN					: ')';
+NUMBER					: [0-9]+; // How will we handle leading zeros?
 WHITESPACE	 			: [ \t\r\n]+ -> skip;

@@ -13,14 +13,21 @@ string get_input() {
 	return input;
 }
 
+void dump_string_info(const string& s) {
+	ANTLRInputStream is(s);
+	pierogiLexer lexer(&is);
+	CommonTokenStream tokens(&lexer);
+	tokens.fill();
+	for (const auto& token : tokens.getTokens()) {
+		cout << token->toString() << endl;
+	}
+	pierogiParser parser(&tokens);
+}
+
 int main() {
 	string input;
 	while ((input = get_input()) != "exit") {
-		ANTLRInputStream is(input);
-		pierogiLexer lexer(&is);
-		CommonTokenStream tokens(&lexer);
-		pierogiParser parser(&tokens);
-		cout << parser.getNumberOfSyntaxErrors() << endl;
+		dump_string_info(input);
 	}
 	return 0;
 }
