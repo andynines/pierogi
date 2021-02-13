@@ -1,8 +1,8 @@
 grammar pierogi;
 
-expr		: expr '+' expr
-			| Number;
-Number		: [0-9]+;
-WS : [ \t\r\n]+ -> skip;
+expr					: expr PLUS expr
+						| NUMBER;
 
-// Casing of rule names affects antlr's interpretation of them. Needs more research
+PLUS					: '+' ;
+NUMBER					: [0-9]+;
+WHITESPACE	 			: [ \t\r\n]+ -> skip;
