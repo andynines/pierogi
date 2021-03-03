@@ -26,6 +26,8 @@ void dump_string_info(const string& s) {
 
 int main() {
 	string input;
+	cout << "Pierogi tokenizer" << endl;
+	cout << "Type 'exit' to exit." << endl;
 	while ((input = get_input()) != "exit") {
 		dump_string_info(input);
 	}
