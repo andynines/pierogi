@@ -1,6 +1,8 @@
 #ifndef PIEROGI_LEXER_HPP
 #define PIEROGI_LEXER_HPP
 
+#include "source_reader.hpp"
+
 #include <string>
 #include <vector>
 
@@ -10,8 +12,11 @@ enum class token_type {
 	// Single-character tokens
 	LEFT_PARENTHESIS,
 	RIGHT_PARENTHESIS,
+	LEFT_SQUARE_BRACKET,
+	RIGHT_SQUARE_BRACKET,
 	LEFT_BRACE,
 	RIGHT_BRACE,
+	COLON,
 	COMMA,
 	DOT,
 	MINUS,
@@ -22,13 +27,13 @@ enum class token_type {
 	ASTERISK,
 
 	// One or two character tokens
-	EQUAL, EQUAL_EQUAL, NOT_EQUAL,
+	EQUAL, NOT_EQUAL,
 	GREATER_THAN, GREATER_EQUAL,
 	LESS_THAN, LESS_EQUAL,
 	DOT_DOT,
 
-	// Reserved words
-	AND, OR, NOT,
+	// Keywords
+	AND, OR, NOT, TRUE, FALSE, NIL,
 
 	// Literals
 	IDENTIFIER, STRING, NUMBER,

@@ -5,12 +5,12 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra")
 
 set(TEST_SRC_DIR "${CMAKE_SOURCE_DIR}/test")
-file(GLOB TEST_SRC "${TEST_SRC_DIR}/*")
+file(GLOB TEST_SRC CONFIGURE_DEPENDS "${TEST_SRC_DIR}/*")
 
 set(INCLUDE_DIR "${CMAKE_SOURCE_DIR}/include")
 
 set(SRC_DIR "${CMAKE_SOURCE_DIR}/src")
-file(GLOB SRC "${SRC_DIR}/*.cpp")
+file(GLOB SRC CONFIGURE_DEPENDS "${SRC_DIR}/*.cpp")
 
 add_library(pierogi-core SHARED "${SRC}")
 target_include_directories(pierogi-core PUBLIC "${INCLUDE_DIR}")

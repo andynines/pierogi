@@ -1,0 +1,5 @@
+# This code uses every token that Pierogi recognizes.
+value: (\x { x + 123.45 })(list[2 * 4] / 5^7) #Trailing comment
+
+value2 : container.method("argument" .. s, nil) and (true or false)
+function(not 9-3 = 608) <= (0 < 1) >= (1 > 0) != nil
