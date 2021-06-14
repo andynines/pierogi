@@ -26,29 +26,24 @@ bool token::operator!=(const token& other) const {
 }
 
 struct lexer_state {
-	std::string source;
+	source_reader::source_reader_interface& source;
 	std::vector<token> tokens;
-	size_t current = 0;
 	std::stringstream lexeme;
 	int line = 1;
 
-	explicit lexer_state(std::string source) : source(std::move(source)) {
+	explicit lexer_state(source_reader::source_reader_interface& source) : source(source) {
 	}
 
 	void lex_tokens() {
-		while (!at_end()) lex_next_token();
+		while (!source.at_end()) lex_next_token();
 		tokens.emplace_back(token_type::TOKEN_EOF, "", nullptr, line);
-	}
-
-	[[nodiscard]] bool at_end() const {
-		return current >= source.length();
 	}
 
 	void lex_next_token() {
 		lexeme.str(std::string());
 		lexeme.clear();
-		lexeme << get_current();
-		char c = consume_next();
+		lexeme << source.peek_current();
+		char c = source.consume_current();
 		switch (c) {
 			case '\\':
 				add_token(token_type::BACKSLASH);
@@ -96,16 +91,16 @@ struct lexer_state {
 				add_token(token_type::COMMA);
 				break;
 			case '<':
-				add_token(consume_next_if_matches('=') ? token_type::LESS_EQUAL : token_type::LESS_THAN);
+				add_token(consume_current_if_matches('=') ? token_type::LESS_EQUAL : token_type::LESS_THAN);
 				break;
 			case '>':
-				add_token(consume_next_if_matches('=') ? token_type::GREATER_EQUAL : token_type::GREATER_THAN);
+				add_token(consume_current_if_matches('=') ? token_type::GREATER_EQUAL : token_type::GREATER_THAN);
 				break;
 			case '!':
-				if (consume_next_if_matches('=')) add_token(token_type::NOT_EQUAL); // TODO: raise error for singular !
+				if (consume_current_if_matches('=')) add_token(token_type::NOT_EQUAL); // TODO: raise error for singular !
 				break;
 			case '.':
-				add_token(consume_next_if_matches('.') ? token_type::DOT_DOT : token_type::DOT);
+				add_token(consume_current_if_matches('.') ? token_type::DOT_DOT : token_type::DOT);
 				break;
 			case ' ':
 			case '\t':
@@ -115,7 +110,7 @@ struct lexer_state {
 				line++;
 				break;
 			case '#':
-				while (lookahead_one() != '\n' && !at_end()) consume_next();
+				while (source.peek_current() != '\n' && !source.at_end()) source.consume_current();
 				break;
 			case '"':
 				consume_string();
@@ -131,48 +126,30 @@ struct lexer_state {
 
 	}
 
-	char get_current() {
-		return source[current];
-	}
-
-	char consume_next() {
-		return source[current++];
-	}
-
 	void add_token(token_type type) {
 		tokens.emplace_back(type, "", nullptr, line);
 	}
 
-	bool consume_next_if_matches(char expected) {
-		if (at_end() || source[current] != expected) return false;
-		current++;
+	bool consume_current_if_matches(char expected) {
+		if (source.at_end() || source.peek_current() != expected) return false;
+		source.consume_current();
 		return true;
 	}
 
-	[[nodiscard]] char lookahead_one() const {
-		if (at_end()) return '\0';
-		else return source[current];
-	}
-
-	[[nodiscard]] char lookahead_two() const {
-		if (current + 1 >= source.size()) return '\0';
-		return source[current + 1];
-	}
-
 	void consume_string() {
-		while (lookahead_one() != '"' && !at_end()) {
-			if (lookahead_one() == '\n') line++;
-			consume_next();
+		while (source.peek_current() != '"' && !source.at_end()) {
+			if (source.peek_current() == '\n') line++;
+			source.consume_current();
 		}
-		consume_next(); // Consume closing "
+		source.consume_current(); // Consume closing "
 		add_token(token_type::STRING);
 	}
 
 	void consume_number() {
-		while (is_digit(lookahead_one())) consume_next();
-		if (lookahead_one() == '.' && is_digit(lookahead_two())) {
-			consume_next(); // Consume .
-			while (is_digit(lookahead_one())) consume_next();
+		while (is_digit(source.peek_current())) source.consume_current();
+		if (source.peek_current() == '.' && is_digit(source.peek_next())) {
+			source.consume_current(); // Consume .
+			while (is_digit(source.peek_current())) source.consume_current();
 		}
 		add_token(token_type::NUMBER);
 	}
@@ -186,7 +163,7 @@ struct lexer_state {
 				{"false", token_type::FALSE},
 				{"nil", token_type::NIL}
 		};
-		while (is_alphanumeric(lookahead_one())) lexeme << consume_next();
+		while (is_alphanumeric(source.peek_current())) lexeme << source.consume_current();
 		auto it = keywords.find(lexeme.str());
 		add_token(it != keywords.end() ? it->second : token_type::IDENTIFIER);
 	}
@@ -206,8 +183,8 @@ struct lexer_state {
 	}
 };
 
-std::vector<token> tokenize(std::string source) {
-	lexer_state lexer(std::move(source));
+std::vector<token> tokenize(source_reader::source_reader_interface& source) {
+	lexer_state lexer(source);
 	lexer.lex_tokens();
 	return lexer.tokens;
 }

@@ -1,19 +1,25 @@
+#include "source_reader.hpp"
 #include "lexer.hpp"
 
 #include <catch.hpp>
 
 #include <algorithm>
 
+using namespace pierogi::source_reader;
 using namespace pierogi::lexer;
 
+const fs::path test_assets_dir = fs::path(TEST_ASSET_DIR);
+
 void expect_eof(const std::string& s) {
-	auto tokens = tokenize(s);
+	auto reader = repl_reader(s);
+	auto tokens = tokenize(reader);
 	REQUIRE(tokens.size() == 1);
 	REQUIRE(tokens[0].type == token_type::TOKEN_EOF);
 }
 
 std::vector<token_type> extract_token_types(const std::string& s) {
-	auto tokens = tokenize(s);
+	auto reader = repl_reader(s);
+	auto tokens = tokenize(reader);
 	std::vector<token_type> token_types(tokens.size());
 	std::transform(tokens.begin(), tokens.end(), token_types.begin(), [](const token& t) {
 		return t.type;
@@ -78,8 +84,6 @@ TEST_CASE("Ignore whitespace on one line") {
 	expect_eof(" \t   \r");
 }
 
-
-
 TEST_CASE("Ignore comment on its own line") {
 	expect_eof("# Test comment");
 }
@@ -105,3 +109,4 @@ TEST_CASE("Recognize all tokens in sequence") {
 // reject leading and trailing dot
 // all sorts of error reporting
 // or vs orchid, etc.
+// identifier 123abc should cause error

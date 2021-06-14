@@ -55,7 +55,7 @@ public:
 	bool operator!=(const token& other) const;
 };
 
-std::vector<token> tokenize(std::string source);
+std::vector<token> tokenize(source_reader::source_reader_interface& source);
 
 } // namespace pierogi::lexer
 
