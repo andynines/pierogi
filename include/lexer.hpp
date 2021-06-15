@@ -9,7 +9,6 @@
 namespace pierogi::lexer {
 
 enum class token_type {
-	// Single-character tokens
 	LEFT_PARENTHESIS,
 	RIGHT_PARENTHESIS,
 	LEFT_SQUARE_BRACKET,
@@ -26,17 +25,24 @@ enum class token_type {
 	BACKSLASH,
 	ASTERISK,
 
-	// One or two character tokens
-	EQUAL, NOT_EQUAL,
-	GREATER_THAN, GREATER_EQUAL,
-	LESS_THAN, LESS_EQUAL,
+	EQUAL,
+	NOT_EQUAL,
+	GREATER_THAN,
+	GREATER_EQUAL,
+	LESS_THAN,
+	LESS_EQUAL,
 	DOT_DOT,
 
-	// Keywords
-	AND, OR, NOT, TRUE, FALSE, NIL,
+	AND,
+	OR,
+	NOT,
+	TRUE,
+	FALSE,
+	NIL,
 
-	// Literals
-	IDENTIFIER, STRING, NUMBER,
+	IDENTIFIER,
+	STRING,
+	NUMBER,
 
 	TOKEN_EOF
 };

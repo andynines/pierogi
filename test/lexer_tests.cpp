@@ -1,4 +1,5 @@
 #include "source_reader.hpp"
+#include "error_reporter.hpp"
 #include "lexer.hpp"
 
 #include <catch.hpp>
@@ -8,7 +9,7 @@
 using namespace pierogi::source_reader;
 using namespace pierogi::lexer;
 
-const fs::path test_assets_dir = fs::path(TEST_ASSET_DIR);
+const fs::path test_assets_dir(TEST_ASSET_DIR);
 
 void expect_eof(const std::string& s) {
 	auto reader = repl_reader(s);
@@ -93,6 +94,82 @@ TEST_CASE("Ignore comment on a line with tokens") {
 }
 
 TEST_CASE("Recognize all tokens in sequence") {
+	auto reader = file_reader(test_assets_dir / "all_tokens.prgi");
+	auto tokens = tokenize(reader);
+	std::vector<token_type> token_types(tokens.size());
+	std::transform(tokens.begin(), tokens.end(), token_types.begin(), [](const token& t) {
+		return t.type;
+	});
+	REQUIRE_THAT(token_types, Catch::Equals<token_type>({
+		token_type::IDENTIFIER,
+		token_type::COLON,
+		token_type::LEFT_PARENTHESIS,
+		token_type::BACKSLASH,
+		token_type::IDENTIFIER,
+		token_type::LEFT_BRACE,
+		token_type::IDENTIFIER,
+		token_type::PLUS,
+		token_type::NUMBER,
+		token_type::RIGHT_BRACE,
+		token_type::RIGHT_PARENTHESIS,
+		token_type::LEFT_PARENTHESIS,
+		token_type::IDENTIFIER,
+		token_type::LEFT_SQUARE_BRACKET,
+		token_type::NUMBER,
+		token_type::ASTERISK,
+		token_type::NUMBER,
+		token_type::RIGHT_SQUARE_BRACKET,
+		token_type::SLASH,
+		token_type::NUMBER,
+		token_type::CARET,
+		token_type::NUMBER,
+		token_type::RIGHT_PARENTHESIS,
+		token_type::IDENTIFIER,
+		token_type::COLON,
+		token_type::IDENTIFIER,
+		token_type::DOT,
+		token_type::IDENTIFIER,
+		token_type::LEFT_PARENTHESIS,
+		token_type::STRING,
+		token_type::DOT_DOT,
+		token_type::IDENTIFIER,
+		token_type::COMMA,
+		token_type::NIL,
+		token_type::RIGHT_PARENTHESIS,
+		token_type::AND,
+		token_type::LEFT_PARENTHESIS,
+		token_type::TRUE,
+		token_type::OR,
+		token_type::FALSE,
+		token_type::RIGHT_PARENTHESIS,
+		token_type::IDENTIFIER,
+		token_type::LEFT_PARENTHESIS,
+		token_type::NOT,
+		token_type::NUMBER,
+		token_type::MINUS,
+		token_type::NUMBER,
+		token_type::EQUAL,
+		token_type::NUMBER,
+		token_type::RIGHT_PARENTHESIS,
+		token_type::LESS_EQUAL,
+		token_type::LEFT_PARENTHESIS,
+		token_type::NUMBER,
+		token_type::LESS_THAN,
+		token_type::NUMBER,
+		token_type::RIGHT_PARENTHESIS,
+		token_type::GREATER_EQUAL,
+		token_type::LEFT_PARENTHESIS,
+		token_type::NUMBER,
+		token_type::GREATER_THAN,
+		token_type::NUMBER,
+		token_type::RIGHT_PARENTHESIS,
+		token_type::NOT_EQUAL,
+		token_type::NIL,
+		token_type::TOKEN_EOF
+	}));
+}
+
+TEST_CASE("Recognize invalid identifiers") {
 
 }
 
