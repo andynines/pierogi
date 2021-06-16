@@ -20,11 +20,9 @@ add_executable(pierogi-tests "${TEST_SRC}")
 target_link_libraries(pierogi-tests PUBLIC pierogi-core)
 target_compile_definitions(pierogi-tests PRIVATE TEST_ASSET_DIR="${CMAKE_SOURCE_DIR}/test/prgi")
 target_include_directories(pierogi-tests
-		PUBLIC "${INCLUDE_DIR}"
-		PUBLIC "${INCLUDE_DIR}/third-party")
+		PUBLIC "${INCLUDE_DIR}")
 
 add_executable(pierogi-main main.cpp)
 target_link_libraries(pierogi-main PUBLIC pierogi-core)
 target_include_directories(pierogi-main
-		PUBLIC "${INCLUDE_DIR}"
-		PUBLIC "${INCLUDE_DIR}/third-party")
+		PUBLIC "${INCLUDE_DIR}")

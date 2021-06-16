@@ -1,6 +1,6 @@
 #include "source_reader.hpp"
 
-#include <catch.hpp>
+#include "third-party/catch.hpp"
 
 #include <sstream>
 

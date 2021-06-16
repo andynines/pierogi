@@ -1,8 +1,8 @@
 #include "source_reader.hpp"
-#include "error_reporter.hpp"
+#include "errors.hpp"
 #include "lexer.hpp"
 
-#include <catch.hpp>
+#include "third-party/catch.hpp"
 
 #include <algorithm>
 
