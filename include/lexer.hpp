@@ -2,9 +2,12 @@
 #define PIEROGI_LEXER_HPP
 
 #include "source_reader.hpp"
+#include "types.hpp"
+#include "errors.hpp"
 
 #include <string>
 #include <vector>
+#include <variant>
 
 namespace pierogi::lexer {
 
@@ -26,7 +29,9 @@ enum class token_type {
 	ASTERISK,
 
 	EQUAL,
+	EQUAL_EQUAL,
 	NOT_EQUAL,
+    SLASH_SLASH,
 	GREATER_THAN,
 	GREATER_EQUAL,
 	LESS_THAN,
@@ -44,24 +49,20 @@ enum class token_type {
 	STRING,
 	NUMBER,
 
-	TOKEN_EOF
+    EOF_
 };
 
 struct token {
 	token_type type;
 	std::string lexeme;
-	void* literal{};
+	types::value value;
 	int line;
 
-public:
-	token(token_type type, std::string lexeme, void* literal, int line);
-
-	explicit operator std::string() const;
-	bool operator==(const token& other) const;
-	bool operator!=(const token& other) const;
+	token(token_type type, std::string lexeme, types::value value, int line);
 };
 
-std::vector<token> tokenize(source_reader::source_reader_interface& source);
+std::vector<token> tokenize(source_reader::source_reader_interface& source,
+							errors::reporter_interface& error_reporter);
 
 } // namespace pierogi::lexer
 

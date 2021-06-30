@@ -1,3 +1,4 @@
 .idea/*
 cmake-build-debug/*
-include/antlr4-generated/*
+pstl/__pycache__/*
+include/generated/*

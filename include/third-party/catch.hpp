@@ -2,7 +2,7 @@
  *  Catch v2.13.6
  *  Generated: 2021-04-16 18:23:38.044268
  *  ----------------------------------------------------------
- *  This file has been merged from multiple headers. Please don't edit it_current directly
+ *  This file has been merged from multiple headers. Please don't edit it directly
  *  Copyright (c) 2021 Two Blue Cubes Ltd. All rights reserved.
  *
  *  Distributed under the Boost Software License, Version 1.0. (See accompanying
@@ -289,9 +289,9 @@ namespace Catch {
 
 // Use of __COUNTER__ is suppressed during code analysis in
 // CLion/AppCode 2017.2.x and former, because __COUNTER__ is not properly
-// handled by it_current.
+// handled by it.
 // Otherwise all supported compilers support COUNTER macro,
-// but user still might want to turn it_current off
+// but user still might want to turn it off
 #if ( !defined(__JETBRAINS_IDE__) || __JETBRAINS_IDE__ >= 20170300L )
     #define CATCH_INTERNAL_CONFIG_COUNTER
 #endif
@@ -299,7 +299,7 @@ namespace Catch {
 ////////////////////////////////////////////////////////////////////////////////
 
 // RTX is a special version of Windows that is real time.
-// This means that it_current is detected as Windows, but does not provide
+// This means that it is detected as Windows, but does not provide
 // the same set of capabilities as real Windows does.
 #if defined(UNDER_RTSS) || defined(RTX64_BUILD)
     #define CATCH_INTERNAL_CONFIG_NO_WINDOWS_SEH
@@ -475,7 +475,7 @@ namespace Catch {
 #include <string>
 #include <cstdint>
 
-// We need a dummy global operator<< so we can bring it_current into Catch namespace later
+// We need a dummy global operator<< so we can bring it into Catch namespace later
 struct Catch_global_namespace_dummy {};
 std::ostream& operator<<(std::ostream&, Catch_global_namespace_dummy);
 
@@ -600,7 +600,7 @@ namespace Catch {
 
     /// A non-owning string class (similar to the forthcoming std::string_view)
     /// Note that, because a StringRef may be a substring of another string,
-    /// it_current may not be null terminated.
+    /// it may not be null terminated.
     class StringRef {
     public:
         using size_type = std::size_t;
@@ -937,7 +937,7 @@ namespace Catch {
     struct is_callable<Fun(Args...)> : decltype(is_callable_tester::test<Fun, Args...>(0)) {};
 
 #if defined(__cpp_lib_is_invocable) && __cpp_lib_is_invocable >= 201703
-    // std::result_of is deprecated in C++17 and removed in C++20. Hence, it_current is
+    // std::result_of is deprecated in C++17 and removed in C++20. Hence, it is
     // replaced with std::invoke_result here.
     template <typename Func, typename... U>
     using FunctionReturnType = std::remove_reference_t<std::remove_cv_t<std::invoke_result_t<Func, U...>>>;
@@ -1864,7 +1864,7 @@ namespace Catch {
 } // namespace Catch
 
 //////////////////////////////////////////////////////
-// Separate std-lib types stringification, so it_current can be selectively enabled
+// Separate std-lib types stringification, so it can be selectively enabled
 // This means that we do not bring in
 
 #if defined(CATCH_CONFIG_ENABLE_ALL_STRINGMAKERS)
@@ -2208,7 +2208,7 @@ namespace Catch {
         {}
 
         // We don't actually need a virtual destructor, but many static analysers
-        // complain if it_current's not here :-(
+        // complain if it's not here :-(
         virtual ~ITransientExpression();
 
         bool m_isBinaryExpression;
@@ -2241,56 +2241,56 @@ namespace Catch {
         auto operator && ( T ) const -> BinaryExpr<LhsT, RhsT const&> const {
             static_assert(always_false<T>::value,
             "chained comparisons are not supported inside assertions, "
-            "wrap the expression inside parentheses, or decompose it_current");
+            "wrap the expression inside parentheses, or decompose it");
         }
 
         template<typename T>
         auto operator || ( T ) const -> BinaryExpr<LhsT, RhsT const&> const {
             static_assert(always_false<T>::value,
             "chained comparisons are not supported inside assertions, "
-            "wrap the expression inside parentheses, or decompose it_current");
+            "wrap the expression inside parentheses, or decompose it");
         }
 
         template<typename T>
         auto operator == ( T ) const -> BinaryExpr<LhsT, RhsT const&> const {
             static_assert(always_false<T>::value,
             "chained comparisons are not supported inside assertions, "
-            "wrap the expression inside parentheses, or decompose it_current");
+            "wrap the expression inside parentheses, or decompose it");
         }
 
         template<typename T>
         auto operator != ( T ) const -> BinaryExpr<LhsT, RhsT const&> const {
             static_assert(always_false<T>::value,
             "chained comparisons are not supported inside assertions, "
-            "wrap the expression inside parentheses, or decompose it_current");
+            "wrap the expression inside parentheses, or decompose it");
         }
 
         template<typename T>
         auto operator > ( T ) const -> BinaryExpr<LhsT, RhsT const&> const {
             static_assert(always_false<T>::value,
             "chained comparisons are not supported inside assertions, "
-            "wrap the expression inside parentheses, or decompose it_current");
+            "wrap the expression inside parentheses, or decompose it");
         }
 
         template<typename T>
         auto operator < ( T ) const -> BinaryExpr<LhsT, RhsT const&> const {
             static_assert(always_false<T>::value,
             "chained comparisons are not supported inside assertions, "
-            "wrap the expression inside parentheses, or decompose it_current");
+            "wrap the expression inside parentheses, or decompose it");
         }
 
         template<typename T>
         auto operator >= ( T ) const -> BinaryExpr<LhsT, RhsT const&> const {
             static_assert(always_false<T>::value,
             "chained comparisons are not supported inside assertions, "
-            "wrap the expression inside parentheses, or decompose it_current");
+            "wrap the expression inside parentheses, or decompose it");
         }
 
         template<typename T>
         auto operator <= ( T ) const -> BinaryExpr<LhsT, RhsT const&> const {
             static_assert(always_false<T>::value,
             "chained comparisons are not supported inside assertions, "
-            "wrap the expression inside parentheses, or decompose it_current");
+            "wrap the expression inside parentheses, or decompose it");
         }
     };
 
@@ -2387,14 +2387,14 @@ namespace Catch {
         auto operator && ( RhsT const& ) -> BinaryExpr<LhsT, RhsT const&> const {
             static_assert(always_false<RhsT>::value,
             "operator&& is not supported inside assertions, "
-            "wrap the expression inside parentheses, or decompose it_current");
+            "wrap the expression inside parentheses, or decompose it");
         }
 
         template<typename RhsT>
         auto operator || ( RhsT const& ) -> BinaryExpr<LhsT, RhsT const&> const {
             static_assert(always_false<RhsT>::value,
             "operator|| is not supported inside assertions, "
-            "wrap the expression inside parentheses, or decompose it_current");
+            "wrap the expression inside parentheses, or decompose it");
         }
 
         auto makeUnaryExpr() const -> UnaryExpr<LhsT> {
@@ -2794,7 +2794,7 @@ namespace Catch {
     Catch::getResultCapture().emplaceUnscopedMessage( Catch::MessageBuilder( macroName##_catch_sr, CATCH_INTERNAL_LINEINFO, Catch::ResultWas::Info ) << log )
 
 ///////////////////////////////////////////////////////////////////////////////
-// Although this is matcher-based, it_current can be used with just a string
+// Although this is matcher-based, it can be used with just a string
 #define INTERNAL_CATCH_THROWS_STR_MATCHES( macroName, resultDisposition, matcher, ... ) \
     do { \
         Catch::AssertionHandler catchAssertionHandler( macroName##_catch_sr, CATCH_INTERNAL_LINEINFO, CATCH_INTERNAL_STRINGIFY(__VA_ARGS__) ", " CATCH_INTERNAL_STRINGIFY(matcher), resultDisposition ); \
@@ -3263,7 +3263,7 @@ namespace Matchers {
 
 #if defined(__OBJC__)
         // Hack to fix Catch GH issue #1661. Could use id for generic Object support.
-        // use of const for Object pointers is very uncommon and under ARC it_current causes some kind of signature mismatch that breaks compilation
+        // use of const for Object pointers is very uncommon and under ARC it causes some kind of signature mismatch that breaks compilation
         template<>
         struct MatcherMethod<NSString*> {
             virtual bool match( NSString* arg ) const = 0;
@@ -4078,7 +4078,7 @@ namespace Generators {
 
     template<typename L>
     // Note: The type after -> is weird, because VS2015 cannot parse
-    //       the expression used in the typedef inside, when it_current is in
+    //       the expression used in the typedef inside, when it is in
     //       return type. Yeah.
     auto generate( StringRef generatorName, SourceLineInfo const& lineInfo, L const& generatorExpression ) -> decltype(std::declval<decltype(generatorExpression())>().get()) {
         using UnderlyingType = typename decltype(generatorExpression())::type;
@@ -4221,7 +4221,7 @@ namespace Generators {
             // 2) We are reading our own cache
 
             // In the first case, we need to poke the underlying generator.
-            // If it_current happily moves, we are left in that state, otherwise it_current is time to start reading from our cache
+            // If it happily moves, we are left in that state, otherwise it is time to start reading from our cache
             if (m_current_repeat == 0) {
                 const auto success = m_generator.next();
                 if (!success) {
@@ -4545,7 +4545,7 @@ namespace Catch {
 
     // This is a simple implementation of C++11 Uniform Random Number
     // Generator. It does not provide all operators, because Catch2
-    // does not use it_current, but it_current should behave as expected inside stdlib's
+    // does not use it, but it should behave as expected inside stdlib's
     // distributions.
     // The implementation is based on the PCG family (http://pcg-random.org)
     class SimplePcg32 {
@@ -4578,7 +4578,7 @@ namespace Catch {
 
         std::uint64_t m_state;
         // This part of the state determines which "stream" of the numbers
-        // is chosen -- we take it_current as a constant for Catch2, so we only
+        // is chosen -- we take it as a constant for Catch2, so we only
         // need to deal with seeding the main state.
         // Picked by reading 8 bytes from `/dev/random` :-)
         static const std::uint64_t s_inc = (0x13ed0cc53f939476ULL << 1ULL) | 1ULL;
@@ -5876,16 +5876,16 @@ namespace Catch {
             }
             else {
                 SectionNode& parentNode = *m_sectionStack.back();
-                auto it_current =
+                auto it =
                     std::find_if(   parentNode.childSections.begin(),
                                     parentNode.childSections.end(),
                                     BySectionInfo( sectionInfo ) );
-                if( it_current == parentNode.childSections.end() ) {
+                if( it == parentNode.childSections.end() ) {
                     node = std::make_shared<SectionNode>( incompleteStats );
                     parentNode.childSections.push_back( node );
                 }
                 else
-                    node = *it_current;
+                    node = *it;
             }
             m_sectionStack.push_back( node );
             m_deepestSection = std::move(node);
@@ -5898,7 +5898,7 @@ namespace Catch {
             // AssertionResult holds a pointer to a temporary DecomposedExpression,
             // which getExpandedExpression() calls to build the expression string.
             // Our section stack copy of the assertionResult will likely outlive the
-            // temporary, so it_current must be expanded or discarded now to avoid calling
+            // temporary, so it must be expanded or discarded now to avoid calling
             // a destroyed object later.
             prepareExpandedExpression(const_cast<AssertionResult&>( assertionStats.assertionResult ) );
             SectionNode& sectionNode = *m_sectionStack.back();
@@ -6184,7 +6184,7 @@ namespace Catch {
         void printClosedHeader(std::string const& _name);
         void printOpenHeader(std::string const& _name);
 
-        // if string has a : in first line will set indent to follow it_current on
+        // if string has a : in first line will set indent to follow it on
         // subsequent lines
         void printHeaderString(std::string const& _string, std::size_t indent = 0);
 
@@ -6690,11 +6690,11 @@ namespace Catch {
 
             /// We need to reinvent std::function because every piece of code that might add overhead
             /// in a measurement context needs to have consistent performance characteristics so that we
-            /// can account for it_current in the measurement.
+            /// can account for it in the measurement.
             /// Implementations of std::function with optimizations that aren't always applicable, like
             /// small buffer optimizations, are not uncommon.
             /// This is effectively an implementation of std::function without any such optimizations;
-            /// it_current may be slow, but it_current is consistently slow.
+            /// it may be slow, but it is consistently slow.
             struct BenchmarkFunction {
             private:
                 struct callable {
@@ -6864,7 +6864,7 @@ namespace Catch {
 
             struct optimized_away_error : std::exception {
                 const char* what() const noexcept override {
-                    return "could not measure benchmark, maybe it_current was optimized away";
+                    return "could not measure benchmark, maybe it was optimized away";
                 }
             };
 
@@ -7007,8 +7007,8 @@ namespace Catch {
                 sample results;
                 results.reserve(n);
 
-                for (auto it_current = first; it_current != last; ++it_current) {
-                    std::iter_swap(it_current, first);
+                for (auto it = first; it != last; ++it) {
+                    std::iter_swap(it, first);
                     results.push_back(estimator(second, last));
                 }
 
@@ -7256,9 +7256,9 @@ namespace Catch {
 
                     Duration mean = Duration(0);
                     int i = 0;
-                    for (auto it_current = first; it_current < last; ++it_current, ++i) {
-                        samples.push_back(Duration(*it_current));
-                        mean += Duration(*it_current);
+                    for (auto it = first; it < last; ++it, ++i) {
+                        samples.push_back(Duration(*it));
+                        mean += Duration(*it);
                     }
                     mean /= i;
 
@@ -7955,9 +7955,9 @@ namespace Catch {
     #endif
 
 #elif defined(CATCH_PLATFORM_LINUX)
-    // If we can use inline assembler, do it_current because this allows us to break
+    // If we can use inline assembler, do it because this allows us to break
     // directly at the location of the failing check instead of breaking inside
-    // raise() called from it_current, i.e. one stack frame below.
+    // raise() called from it, i.e. one stack frame below.
     #if defined(__GNUC__) && (defined(__i386) || defined(__x86_64))
         #define CATCH_TRAP() asm volatile ("int $3") /* NOLINT */
     #else // Fall back to the generic way.
@@ -8233,7 +8233,7 @@ namespace Catch {
         if( m_reaction.shouldDebugBreak ) {
 
             // If you find your debugger stopping you here then go one level up on the
-            // call-stack for the code that caused it_current (typically a failed assertion)
+            // call-stack for the code that caused it (typically a failed assertion)
 
             // (To go back to the test and change execution, jump over the throw, next)
             CATCH_BREAK_INTO_DEBUGGER();
@@ -8269,7 +8269,7 @@ namespace Catch {
         m_resultCapture.handleNonExpr(m_assertionInfo, ResultWas::Ok, m_reaction);
     }
 
-    // This is the overload that takes a string and infers the Equals matcher from it_current
+    // This is the overload that takes a string and infers the Equals matcher from it
     // The more general overload, that takes any string matcher, is in catch_capture_matchers.cpp
     void handleExceptionMatchExpr( AssertionHandler& handler, std::string const& str, StringRef const& matcherString  ) {
         handleExceptionMatchExpr( handler, Matchers::Equals( str ), matcherString );
@@ -8853,7 +8853,7 @@ namespace detail {
     // Abstracts iterators into args as a stream of tokens, with option arguments uniformly handled
     class TokenStream {
         using Iterator = std::vector<std::string>::const_iterator;
-        Iterator it_current;
+        Iterator it;
         Iterator itEnd;
         std::vector<Token> m_tokenBuffer;
 
@@ -8861,11 +8861,11 @@ namespace detail {
             m_tokenBuffer.resize( 0 );
 
             // Skip any empty strings
-            while( it_current != itEnd && it_current->empty() )
-                ++it_current;
+            while( it != itEnd && it->empty() )
+                ++it;
 
-            if( it_current != itEnd ) {
-                auto const &next = *it_current;
+            if( it != itEnd ) {
+                auto const &next = *it;
                 if( isOptPrefix( next[0] ) ) {
                     auto delimiterPos = next.find_first_of( " :=" );
                     if( delimiterPos != std::string::npos ) {
@@ -8891,15 +8891,15 @@ namespace detail {
     public:
         explicit TokenStream( Args const &args ) : TokenStream( args.m_args.begin(), args.m_args.end() ) {}
 
-        TokenStream( Iterator it_current, Iterator itEnd ) : it_current( it_current ), itEnd( itEnd ) {
+        TokenStream( Iterator it, Iterator itEnd ) : it( it ), itEnd( itEnd ) {
             loadBuffer();
         }
 
         explicit operator bool() const {
-            return !m_tokenBuffer.empty() || it_current != itEnd;
+            return !m_tokenBuffer.empty() || it != itEnd;
         }
 
-        auto count() const -> size_t { return m_tokenBuffer.size() + (itEnd - it_current); }
+        auto count() const -> size_t { return m_tokenBuffer.size() + (itEnd - it); }
 
         auto operator*() const -> Token {
             assert( !m_tokenBuffer.empty() );
@@ -8915,8 +8915,8 @@ namespace detail {
             if( m_tokenBuffer.size() >= 2 ) {
                 m_tokenBuffer.erase( m_tokenBuffer.begin() );
             } else {
-                if( it_current != itEnd )
-                    ++it_current;
+                if( it != itEnd )
+                    ++it;
                 loadBuffer();
             }
             return *this;
@@ -10264,7 +10264,7 @@ namespace Catch {
     void Colour::use( Code _colourCode ) {
         static IColourImpl* impl = platformColourInstance();
         // Strictly speaking, this cannot possibly happen.
-        // However, under some conditions it_current does happen (see #1626),
+        // However, under some conditions it does happen (see #1626),
         // and this change is small enough that we can let practicality
         // triumph over purity in this case.
         if (impl != nullptr) {
@@ -10453,8 +10453,8 @@ namespace Catch {
         // ptrace() the process, but this needs to be done from a child and not
         // this process itself to still allow attaching to this process later
         // if wanted, so is rather heavy. Under Linux we have the PID of the
-        // "debugger" (which doesn't need to be gdb, of course, it_current could also
-        // be strace, for example) in /proc/$PID/status, so just get it_current from
+        // "debugger" (which doesn't need to be gdb, of course, it could also
+        // be strace, for example) in /proc/$PID/status, so just get it from
         // there instead.
         bool isDebuggerActive(){
             // Libstdc++ has a bug, where std::ifstream sets errno to 0
@@ -10465,7 +10465,7 @@ namespace Catch {
                 static const int PREFIX_LEN = 11;
                 if( line.compare(0, PREFIX_LEN, "TracerPid:\t") == 0 ) {
                     // We're traced if the PID is not 0 and no other PID starts
-                    // with 0 digit, so it_current's enough to check for just a single
+                    // with 0 digit, so it's enough to check for just a single
                     // character.
                     return line.length() > PREFIX_LEN && line[PREFIX_LEN] != '0';
                 }
@@ -10518,7 +10518,7 @@ namespace Catch {
 #if defined(CATCH_CONFIG_DISABLE_EXCEPTIONS) && !defined(CATCH_CONFIG_DISABLE_EXCEPTIONS_CUSTOM_HANDLER)
     [[noreturn]]
     void throw_exception(std::exception const& e) {
-        Catch::cerr() << "Catch will terminate because it_current needed to throw an exception.\n"
+        Catch::cerr() << "Catch will terminate because it needed to throw an exception.\n"
                       << "The message was: " << e.what() << '\n';
         std::terminate();
     }
@@ -10579,7 +10579,7 @@ namespace Catch {
 
         namespace {
             // Extracts the actual name part of an enum instance
-            // In other words, it_current returns the Blue part of Bikeshed::Colour::Blue
+            // In other words, it returns the Blue part of Bikeshed::Colour::Blue
             StringRef extractInstanceName(StringRef enumInstance) {
                 // Find last occurrence of ":"
                 size_t name_start = enumInstance.size();
@@ -10773,7 +10773,7 @@ namespace {
     }
 
     //! Minimal size Catch2 needs for its own fatal error handling.
-    //! Picked anecdotally, so it_current might not be sufficient on all
+    //! Picked anecdotally, so it might not be sufficient on all
     //! platforms, and for all configurations.
     constexpr std::size_t minStackSizeForErrors = 32 * 1024;
 } // end unnamed namespace
@@ -10802,7 +10802,7 @@ namespace Catch {
                 reportFatal(def.name);
             }
         }
-        // If its not an exception we care about, pass it_current along.
+        // If its not an exception we care about, pass it along.
         // This stops us from eating debugger breaks etc.
         return EXCEPTION_CONTINUE_SEARCH;
     }
@@ -11491,7 +11491,7 @@ namespace {
     template <typename FP>
     bool almostEqualUlps(FP lhs, FP rhs, uint64_t maxUlpDiff) {
         // Comparison with NaN should always be false.
-        // This way we can rule it_current out before getting into the ugly details
+        // This way we can rule it out before getting into the ugly details
         if (Catch::isnan(lhs) || Catch::isnan(rhs)) {
             return false;
         }
@@ -11988,7 +11988,7 @@ namespace Catch {
 
 #if defined(CATCH_CONFIG_NEW_CAPTURE)
 
-    // Windows's implementation of std::tmpfile is terrible (it_current tries
+    // Windows's implementation of std::tmpfile is terrible (it tries
     // to create a file inside system folder, thus requiring elevated
     // privileges for the binary), so we have to use tmpnam(_s) and
     // create the file ourselves there.
@@ -12116,7 +12116,7 @@ namespace Catch {
          // TBD: What to do about errors here?
          std::fclose(m_file);
          // We manually create the file on Windows only, on Linux
-         // it_current will be autodeleted
+         // it will be autodeleted
 #if defined(_MSC_VER)
          std::remove(m_buffer);
 #endif
@@ -12523,10 +12523,10 @@ namespace Catch {
     ReporterRegistry::~ReporterRegistry() = default;
 
     IStreamingReporterPtr ReporterRegistry::create( std::string const& name, IConfigPtr const& config ) const {
-        auto it_current =  m_factories.find( name );
-        if( it_current == m_factories.end() )
+        auto it =  m_factories.find( name );
+        if( it == m_factories.end() )
             return nullptr;
-        return it_current->second->create( ReporterConfig( config ) );
+        return it->second->create( ReporterConfig( config ) );
     }
 
     void ReporterRegistry::registerReporter( std::string const& name, IReporterFactoryPtr const& factory ) {
@@ -12596,7 +12596,7 @@ namespace Catch {
                 //         int n = GENERATE(1, 2);
                 //     }
                 //
-                // without it_current, the code above creates 5 nested generators.
+                // without it, the code above creates 5 nested generators.
                 if (currentTracker.nameAndLocation() == nameAndLocation) {
                     auto thisTracker = currentTracker.parent().findChild(nameAndLocation);
                     assert(thisTracker);
@@ -12625,7 +12625,7 @@ namespace Catch {
             }
             void close() override {
                 TrackerBase::close();
-                // If a generator has a child (it_current is followed by a section)
+                // If a generator has a child (it is followed by a section)
                 // and none of its children have started, then we must wait
                 // until later to start consuming its values.
                 // This catches cases where `GENERATE` is placed between two
@@ -12681,7 +12681,7 @@ namespace Catch {
                 }();
 
                 // This check is a bit tricky, because m_generator->next()
-                // has a side-effect, where it_current consumes generator's current
+                // has a side-effect, where it consumes generator's current
                 // value, but we do not want to invoke the side-effect if
                 // this generator is still waiting for any child to start.
                 if ( should_wait_for_child ||
@@ -13019,11 +13019,11 @@ namespace Catch {
     void RunContext::handleUnfinishedSections() {
         // If sections ended prematurely due to an exception we stored their
         // infos here so we can tear them down outside the unwind process.
-        for (auto it_current = m_unfinishedSections.rbegin(),
+        for (auto it = m_unfinishedSections.rbegin(),
              itEnd = m_unfinishedSections.rend();
-             it_current != itEnd;
-             ++it_current)
-            sectionEnded(*it_current);
+             it != itEnd;
+             ++it)
+            sectionEnded(*it);
         m_unfinishedSections.clear();
     }
 
@@ -13303,7 +13303,7 @@ namespace Catch {
             // when the return type is std::unique_ptr<IStreamingReporter>
             // doesn't compile without a std::move call. However, this causes
             // a warning on newer platforms. Thus, we have to work around
-            // it_current a bit and downcast the pointer manually.
+            // it a bit and downcast the pointer manually.
             auto ret = std::unique_ptr<IStreamingReporter>(new ListeningReporter);
             auto& multi = static_cast<ListeningReporter&>(*ret);
             auto const& listeners = Catch::getRegistryHub().getReporterRegistry().getListeners();
@@ -13604,7 +13604,7 @@ void StartupExceptionRegistry::add( std::exception_ptr const& exception ) noexce
         CATCH_TRY {
             m_exceptions.push_back(exception);
         } CATCH_CATCH_ALL {
-            // If we run out of memory during start-up there's really not a lot more we can do about it_current
+            // If we run out of memory during start-up there's really not a lot more we can do about it
             std::terminate();
         }
     }
@@ -13962,9 +13962,9 @@ namespace Catch {
     TagAliasRegistry::~TagAliasRegistry() {}
 
     TagAlias const* TagAliasRegistry::find( std::string const& alias ) const {
-        auto it_current = m_registry.find( alias );
-        if( it_current != m_registry.end() )
-            return &(it_current->second);
+        auto it = m_registry.find( alias );
+        if( it != m_registry.end() )
+            return &(it->second);
         else
             return nullptr;
     }
@@ -14410,14 +14410,14 @@ namespace TestCaseTracking {
     }
 
     ITrackerPtr TrackerBase::findChild( NameAndLocation const& nameAndLocation ) {
-        auto it_current = std::find_if( m_children.begin(), m_children.end(),
+        auto it = std::find_if( m_children.begin(), m_children.end(),
             [&nameAndLocation]( ITrackerPtr const& tracker ){
                 return
                     tracker->nameAndLocation().location == nameAndLocation.location &&
                     tracker->nameAndLocation().name == nameAndLocation.name;
             } );
-        return( it_current != m_children.end() )
-            ? *it_current
+        return( it != m_children.end() )
+            ? *it
             : nullptr;
     }
     ITracker& TrackerBase::parent() {
@@ -15367,7 +15367,7 @@ namespace Catch {
         os  << version.majorVersion << '.'
             << version.minorVersion << '.'
             << version.patchNumber;
-        // branchName is never null -> 0th char is \0 if it_current is empty
+        // branchName is never null -> 0th char is \0 if it is empty
         if (version.branchName[0]) {
             os << '-' << version.branchName
                << '.' << version.buildNumber;
@@ -15528,17 +15528,17 @@ namespace {
                     break;
                 }
 
-                // Plain ASCII: Write it_current to stream
+                // Plain ASCII: Write it to stream
                 if (c < 0x7F) {
                     os << c;
                     break;
                 }
 
                 // UTF-8 territory
-                // Check if the encoding is valid and if it_current is not, hex escape bytes.
+                // Check if the encoding is valid and if it is not, hex escape bytes.
                 // Important: We do not check the exact decoded values for validity, only the encoding format
                 // First check that this bytes is a valid lead byte:
-                // This means that it_current is not encoded as 1111 1XXX
+                // This means that it is not encoded as 1111 1XXX
                 // Or as 10XX XXXX
                 if (c <  0xC0 ||
                     c >= 0xF8) {
@@ -15768,7 +15768,7 @@ namespace Catch {
         const std::size_t maxDoubleSize = DBL_MAX_10_EXP + 1 + 1 + 3 + 1;
         char buffer[maxDoubleSize];
 
-        // Save previous errno, to prevent sprintf from overwriting it_current
+        // Save previous errno, to prevent sprintf from overwriting it
         ErrnoGuard guard;
 #ifdef _MSC_VER
         sprintf_s(buffer, "%.3f", duration);
@@ -16630,10 +16630,10 @@ void ConsoleReporter::printTestCaseAndSectionHeader() {
         Colour colourGuard(Colour::Headers);
 
         auto
-            it_current = m_sectionStack.begin() + 1, // Skip first section (test case)
+            it = m_sectionStack.begin() + 1, // Skip first section (test case)
             itEnd = m_sectionStack.end();
-        for (; it_current != itEnd; ++it_current)
-            printHeaderString(it_current->name, 2);
+        for (; it != itEnd; ++it)
+            printHeaderString(it->name, 2);
     }
 
     SourceLineInfo lineInfo = m_sectionStack.back().lineInfo;
@@ -16656,7 +16656,7 @@ void ConsoleReporter::printOpenHeader(std::string const& _name) {
     }
 }
 
-// if string has a : in first line will set indent to follow it_current on
+// if string has a : in first line will set indent to follow it on
 // subsequent lines
 void ConsoleReporter::printHeaderString(std::string const& _string, std::size_t indent) {
     std::size_t i = _string.find(": ");
@@ -16820,11 +16820,11 @@ namespace Catch {
         }
 
         std::string fileNameTag(const std::vector<std::string> &tags) {
-            auto it_current = std::find_if(begin(tags),
+            auto it = std::find_if(begin(tags),
                                    end(tags),
                                    [] (std::string const& tag) {return tag.front() == '#'; });
-            if (it_current != tags.end())
-                return it_current->substr(1);
+            if (it != tags.end())
+                return it->substr(1);
             return std::string();
         }
     } // anonymous namespace
@@ -16964,7 +16964,7 @@ namespace Catch {
                 xml.writeAttribute( "name", name );
             }
             xml.writeAttribute( "time", ::Catch::Detail::stringify( sectionNode.stats.durationInSeconds ) );
-            // This is not ideal, but it_current should be enough to mimic gtest's
+            // This is not ideal, but it should be enough to mimic gtest's
             // junit output.
             // Ideally the JUnit reporter would also handle `skipTest`
             // events and write those out appropriately.

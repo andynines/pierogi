@@ -12,17 +12,20 @@ set(INCLUDE_DIR "${CMAKE_SOURCE_DIR}/include")
 set(SRC_DIR "${CMAKE_SOURCE_DIR}/src")
 file(GLOB SRC CONFIGURE_DEPENDS "${SRC_DIR}/*.cpp")
 
+set(PSTL_DIR "${CMAKE_SOURCE_DIR}/pstl")
+
+add_custom_target(pierogi-ast
+		COMMAND python3 "${PSTL_DIR}/pstl.py" "${PSTL_DIR}/main.pstl" "${INCLUDE_DIR}/generated/ast.hpp"
+		DEPENDS "${PSTL_DIR}/pstl.py" "${PSTL_DIR}/main.pstl")
+
 add_library(pierogi-core SHARED "${SRC}")
+add_dependencies(pierogi-core pierogi-ast)
 target_include_directories(pierogi-core PUBLIC "${INCLUDE_DIR}")
 target_link_libraries(pierogi-core stdc++fs)
 
 add_executable(pierogi-tests "${TEST_SRC}")
 target_link_libraries(pierogi-tests PUBLIC pierogi-core)
 target_compile_definitions(pierogi-tests PRIVATE TEST_ASSET_DIR="${CMAKE_SOURCE_DIR}/test/prgi")
-target_include_directories(pierogi-tests
-		PUBLIC "${INCLUDE_DIR}")
 
 add_executable(pierogi-main main.cpp)
 target_link_libraries(pierogi-main PUBLIC pierogi-core)
-target_include_directories(pierogi-main
-		PUBLIC "${INCLUDE_DIR}")

@@ -34,9 +34,8 @@ private:
 };
 
 TEMPLATE_TEST_CASE("Ingest empty string", "", repl_reader, file_reader_test_wrapper) {
-	using reader_type = TestType;
 	const std::string source;
-	auto reader = reader_type(source);
+	auto reader = TestType(source);
 
 	REQUIRE(reader.at_end());
 	REQUIRE(reader.peek_current() == '\0');
@@ -49,9 +48,8 @@ TEMPLATE_TEST_CASE("Ingest empty string", "", repl_reader, file_reader_test_wrap
 }
 
 TEMPLATE_TEST_CASE("Ingest single character", "", repl_reader, file_reader_test_wrapper) {
-	using reader_type = TestType;
 	const std::string source("x");
-	auto reader = reader_type(source);
+	auto reader = TestType(source);
 
 	REQUIRE(!reader.at_end());
 	REQUIRE(reader.peek_current() == 'x');
@@ -66,9 +64,8 @@ TEMPLATE_TEST_CASE("Ingest single character", "", repl_reader, file_reader_test_
 }
 
 TEMPLATE_TEST_CASE("Peeking ahead doesn't affect current position", "", repl_reader, file_reader_test_wrapper) {
-	using reader_type = TestType;
 	const std::string source("source");
-	auto reader = reader_type(source);
+	auto reader = TestType(source);
 
 	REQUIRE(reader.peek_next() == 'o');
 	REQUIRE(reader.peek_current() == 's');
@@ -83,13 +80,12 @@ TEMPLATE_TEST_CASE("Peeking ahead doesn't affect current position", "", repl_rea
 }
 
 TEMPLATE_TEST_CASE("Ingest long, multiline string", "", repl_reader, file_reader_test_wrapper) {
-	using reader_type = TestType;
 	const std::string source(
 		"If you are interested in stories with happy endings, \n" \
 		"you would be better off reading some other book. \n" \
 		"In this book, not only is there no happy ending, \n" \
 		"there is no happy beginning and very few happy things in the middle.");
-	auto reader = reader_type(source);
+	auto reader = TestType(source);
 
 	std::stringstream ss;
 	while (!reader.at_end()) ss << reader.consume_current();

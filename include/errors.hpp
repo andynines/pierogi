@@ -2,17 +2,26 @@
 #define PIEROGI_ERRORS_HPP
 
 #include <string>
+#include <unordered_map>
 
 namespace pierogi::errors {
 
 enum class error_type {
-	SYNTAX
+    UNRECOGNIZED_CHARACTER,
+    UNTERMINATED_STRING
 };
 
 class reporter_interface {
-	virtual void report(error_type type, const std::string& message) = 0;
+public:
+    virtual void report(error_type type, const std::string& near_lexeme) = 0;
 };
 
-}
+// TODO: Move this class up to the interpreter's level
+class console_reporter : public reporter_interface {
+public:
+	void report(error_type type, const std::string& near_lexeme) override;
+};
+
+} // namespace pierogi::errors
 
 #endif // PIEROGI_ERRORS_HPP

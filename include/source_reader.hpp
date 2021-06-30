@@ -6,8 +6,6 @@
 #include <iterator>
 #include <string>
 
-#include <cstddef>
-
 namespace pierogi::source_reader {
 
 namespace fs = std::experimental::filesystem;

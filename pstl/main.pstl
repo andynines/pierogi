@@ -1,14 +1,8 @@
 
-body = vector<expression> expressions
-
-group = expression inner
-arithmetic_negation = expression operand
-logical_negation = expression operand
-
 addition = expression rhs, expression lhs
 subtraction = expression rhs, expression lhs
 multiplication = expression rhs, expression lhs
 division = expression rhs, expression lhs
 exponentiation = expression base, expression power
 
-function = string name, vector<string> arguments, body definition
+group = expression inside
