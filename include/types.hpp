@@ -44,12 +44,13 @@ using string = std::string;
 
 using boolean = bool;
 
-class list : private std::forward_list<void*> {
-
-};
+class list;
 
 using value = std::variant<nil_type, number, string, boolean, list>;
-using value_pointer = std::unique_ptr<value>;
+
+class list : private std::forward_list<value> {
+
+};
 
 } // namespace pierogi::types
 

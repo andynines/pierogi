@@ -17,7 +17,7 @@ struct lexer_state {
     std::stringstream lexeme;
     int line = 1;
 
-    explicit lexer_state(source_reader::source_reader_interface& source,
+    lexer_state(source_reader::source_reader_interface& source,
                          errors::reporter_interface& error_reporter) :
         read_head(source), error_reporter(error_reporter) {
     }
@@ -85,13 +85,7 @@ struct lexer_state {
             add_token(consume_current_if_matches('.') ? token_type::DOT_DOT : token_type::DOT);
             break;
         case '/':
-            if (consume_current_if_matches('=')) {
-                add_token(token_type::NOT_EQUAL);
-            } else if (consume_current_if_matches('/')) {
-                add_token(token_type::SLASH_SLASH);
-            } else {
-                add_token(token_type::SLASH);
-            }
+            add_token(consume_current_if_matches('=') ? token_type::NOT_EQUAL : token_type::SLASH);
             break;
         case ' ':
         case '\t':
@@ -105,6 +99,7 @@ struct lexer_state {
                 read_head.consume_current();
             break;
         case '"':
+            // TODO: Recognize single-quoted strings too
             consume_string();
             break;
         default:

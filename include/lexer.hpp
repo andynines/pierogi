@@ -31,7 +31,6 @@ enum class token_type {
 	EQUAL,
 	EQUAL_EQUAL,
 	NOT_EQUAL,
-    SLASH_SLASH,
 	GREATER_THAN,
 	GREATER_EQUAL,
 	LESS_THAN,

@@ -112,7 +112,6 @@ TEST_CASE("Recognize each token type individually") {
 
 	expect_single_token("==", token_type::EQUAL_EQUAL);
 	expect_single_token("/=", token_type::NOT_EQUAL);
-    expect_single_token("//", token_type::SLASH_SLASH);
 	expect_single_token("<=", token_type::LESS_EQUAL);
 	expect_single_token(">=", token_type::GREATER_EQUAL);
 	expect_single_token("..", token_type::DOT_DOT);
@@ -144,12 +143,12 @@ TEST_CASE("Ignore comment on a line with tokens") {
 }
 
 TEST_CASE("Read longer sequences of tokens") {
-    expect_token_sequence("3.0 / 5 + (6 - 7) * 9^4 // 8", {
+    expect_token_sequence("3.0 / 5 + (6 - 7) * 9^4", {
         token_type::NUMBER, token_type::SLASH, token_type::NUMBER,
         token_type::PLUS, token_type::LEFT_PARENTHESIS, token_type::NUMBER,
         token_type::MINUS, token_type::NUMBER, token_type::RIGHT_PARENTHESIS,
         token_type::ASTERISK, token_type::NUMBER, token_type::CARET,
-        token_type::NUMBER, token_type::SLASH_SLASH, token_type::NUMBER
+        token_type::NUMBER
     });
     expect_token_sequence("f(x) : [3, true, false]", {
         token_type::IDENTIFIER, token_type::LEFT_PARENTHESIS, token_type::IDENTIFIER,
@@ -232,6 +231,7 @@ TEST_CASE("Record line numbers") {
 TEST_CASE("Extract contents of number tokens") {
     constexpr auto expect_number_lexeme_contents = expect_lexeme_contents<types::number>;
     //expect_number_lexeme_contents("123", types::number(123));
+    // Should permit trailing dots
 }
 
 // number contents

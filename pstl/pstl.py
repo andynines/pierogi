@@ -72,7 +72,7 @@ def generate_definition(name: str, fields: Dict[str, str]) -> str:
     return DEFINITION_TEMPLATE.format(
         name=name,
         fields='\n    '.join(["{0} {1};".format(field_type, field_name) for field_name, field_type in fields.items()]),
-        constructor="{name}({arguments}) : {initializers} {{}}".format(
+        constructor="explicit {name}({arguments}) : {initializers} {{}}".format(
             name=name,
             arguments=", ".join(["{0} {1}".format(field_type, field_name) for field_name, field_type in fields.items()]),
             initializers=", ".join(["{0}({0})".format(field_name) for field_name in fields.keys()])

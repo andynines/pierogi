@@ -24,8 +24,10 @@ char repl_reader::peek_next() const {
 }
 
 file_reader::file_reader(const fs::path& path)
-	: ifs_current(std::ifstream(path)), it_current(iterator(ifs_current)),
-	ifs_lookahead(std::ifstream(path)), it_lookahead(++iterator(ifs_lookahead)) {}
+	: ifs_current(std::ifstream(path, std::ios::in | std::ios::binary)),
+      it_current(iterator(ifs_current)),
+      ifs_lookahead(std::ifstream(path, std::ios::in | std::ios::binary)),
+      it_lookahead(++iterator(ifs_lookahead)) {}
 
 file_reader::iterator file_reader::end = file_reader::iterator{};
 
