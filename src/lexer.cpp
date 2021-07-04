@@ -6,20 +6,20 @@
 
 namespace pierogi::lexer {
 
-token::token(token_type type, std::string lexeme, types::value value, int line) :
-    type(type), lexeme(std::move(lexeme)), value(std::move(value)), line(line) {
+token::token(token_type type, std::string lexeme, types::value value, int line)
+    : type(type), lexeme(std::move(lexeme)), value(std::move(value)), line(line) {
 }
 
-struct lexer_state {
+struct state {
     std::string source;
     errors::reporter_interface& error_reporter;
     std::vector<token> tokens;
     int line = 1;
     size_t lexeme_start_index = 0, current_char_index = 0;
 
-    lexer_state(std::string source,
-                errors::reporter_interface& error_reporter) :
-        source(std::move(source)), error_reporter(error_reporter) {
+    state(std::string source,
+          errors::reporter_interface& error_reporter)
+        : source(std::move(source)), error_reporter(error_reporter) {
     }
     
     [[nodiscard]] bool at_end() const {
@@ -45,7 +45,7 @@ struct lexer_state {
         return source.substr(lexeme_start_index, current_char_index - lexeme_start_index);
     }
 
-    void lex_tokens() {
+    void lex_source() {
         while (!at_end()) lex_next_token();
         tokens.emplace_back(token_type::EOF_, "", std::nullopt, line);
     }
@@ -208,8 +208,8 @@ struct lexer_state {
 
 std::vector<token> tokenize(const std::string& source,
                             errors::reporter_interface& error_reporter) {
-    lexer_state lexer(source, error_reporter);
-    lexer.lex_tokens();
+    state lexer(source, error_reporter);
+    lexer.lex_source();
     return lexer.tokens;
 }
 

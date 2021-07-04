@@ -1,15 +1,36 @@
 
-arithmetic_negation = expression inside
+nil
+true_boolean
+false_boolean
+number 						| types::number value
+string 						| types::string value
+identifier 					| std::string name
 
-logical_negation = expression inside
+arithmetic_negation 		| expression inside
 
-addition = expression lhs, expression rhs
-subtraction = expression lhs, expression rhs
-multiplication = expression lhs, expression rhs
-division = expression lhs, expression rhs
-exponentiation = expression base, expression power
+logical_negation 			| expression inside
 
-conjunction = expression lhs, expression rhs
-disjunction = expression lhs, expression rhs
+addition 					| expression lhs, expression rhs
+subtraction 				| expression lhs, expression rhs
+multiplication 				| expression lhs, expression rhs
+division 					| expression lhs, expression rhs
+exponentiation 				| expression base, expression power
 
-group = expression inside
+equals						| expression lhs, expression rhs
+not_equals					| expression lhs, expression rhs
+less_than					| expression lhs, expression rhs
+greater_than				| expression lhs, expression rhs
+less_equal					| expression lhs, expression rhs
+greater_equal				| expression lhs, expression rhs
+
+construction				| expression lhs, expression rhs
+concatenation				| expression lhs, expression rhs
+
+conjunction 				| expression lhs, expression rhs
+disjunction 				| expression lhs, expression rhs
+
+group 						| expression inside
+
+definition 					| std::string symbol, expression value
+
+function 					| std::vector<std::string> parameters, std::vector<expression> body

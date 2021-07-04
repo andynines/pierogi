@@ -11,6 +11,8 @@ HEADER_TEMPLATE = """\
 #ifndef PIEROGI_AST_HPP
 #define PIEROGI_AST_HPP
 
+#include "types.hpp"
+
 #include <memory>
 #include <string>
 #include <variant>
@@ -36,17 +38,18 @@ struct visitor {{
 #endif // PIEROGI_AST_HPP
 """
 
-# TODO: CLEAN UP (EVERYTHING)
-
 
 def extract_name(line: str) -> str:
-    name = line.split('=')[0].strip()
+    name = line.split('|')[0].strip()
     assert re.fullmatch(IDENTIFIER_PATTERN, name)
     return name
 
 
 def extract_fields(line: str) -> Dict[str, str]:
-    fields = line.split('=')[1]
+    line_split = line.split('|')
+    if len(line_split) < 2:
+        return {}
+    fields = line_split[1]
     pairs = [s.split() for s in fields.split(',')]
     field_types = {pair[1]: pair[0] for pair in pairs}
     for name, type in field_types.items():
@@ -69,16 +72,16 @@ def get_field_names(node_type: str, source_dict: Dict[str, Dict[str, str]]) -> L
 
 
 def generate_node_pointer_types(node_types: List[str]) -> List[str]:
-    return ["{0}_pointer".format(node_type) for node_type in node_types]
+    return ["{}_pointer".format(node_type) for node_type in node_types]
 
 
 def generate_forward_declarations(node_types: List[str]) -> str:
-    declarations = ["struct {0};".format(node_type) for node_type in node_types]
+    declarations = ["struct {};".format(node_type) for node_type in node_types]
     return "\n".join(declarations)
 
 
 def generate_pointer_type_aliases(node_types: List[str], node_pointer_types: List[str]) -> str:
-    alias_template = "using {0} = std::unique_ptr<{1}>;"
+    alias_template = "using {0} = std::shared_ptr<{1}>;"
     aliases = [alias_template.format(node_pointer_type, node_type)
                for node_pointer_type, node_type in zip(node_pointer_types, node_types)]
     return "\n".join(aliases)
@@ -89,15 +92,15 @@ def generate_node_pointer_type_list(node_types: List[str]) -> str:
 
 
 def generate_visitor_methods(node_types: List[str]) -> str:
-    method_template = "virtual T operator()(const {0}& e) {{ return T{{}}; }}"
+    method_template = "virtual T operator()(const {}& e) {{ return T{{}}; }}"
     methods = [method_template.format(node_type) for node_type in node_types]
     return "\n    ".join(methods)
 
 
 def generate_constructor_arguments(node_type: str, source_dict: Dict[str, Dict[str, str]]) -> str:
-    field_names = get_field_names(node_type, source_dict)
-    arguments = ["expression {0}".format(field_name) for field_name in field_names]
-    return ", ".join(arguments)
+    field_type_dict = source_dict[node_type]
+    fields = ["const {1}& {0}".format(field_name, field_type) for field_name, field_type in field_type_dict.items()]
+    return ", ".join(fields)
 
 
 def generate_field_initializers(node_type: str, source_dict: Dict[str, Dict[str, str]]) -> str:
@@ -113,16 +116,22 @@ def generate_fields(node_type: str, source_dict: Dict[str, Dict[str, str]]) -> s
 
 
 def generate_class_definitions(node_types: List[str], source_dict: Dict[str, Dict[str, str]]) -> str:
-    class_definition_template = """struct {node_type} final {{
-    explicit {node_type}({constructor_arguments}) : {field_initializers} {{}}
-    {fields}
-}};"""
-    definitions = [class_definition_template.format(
+    class_definition_template = (
+        "struct {node_type} final {{\n"
+        "    explicit {node_type}({constructor_arguments}) : {field_initializers} {{}}\n"
+        "    {fields}\n"
+        "}};")
+    memberless_class_definition_template = "struct {node_type} final {{}};"
+    definition_templates = {node_type: memberless_class_definition_template
+                   if len(get_field_names(node_type, source_dict)) == 0
+                   else class_definition_template
+                   for node_type in node_types}
+    definitions = [template.format(
         node_type=node_type,
         constructor_arguments=generate_constructor_arguments(node_type, source_dict),
         field_initializers=generate_field_initializers(node_type, source_dict),
         fields=generate_fields(node_type, source_dict)
-    ) for node_type in node_types]
+    ) for node_type, template in definition_templates.items()]
     return "\n\n".join(definitions)
 
 
