@@ -1,8 +1,15 @@
 
-addition = expression rhs, expression lhs
-subtraction = expression rhs, expression lhs
-multiplication = expression rhs, expression lhs
-division = expression rhs, expression lhs
+arithmetic_negation = expression inside
+
+logical_negation = expression inside
+
+addition = expression lhs, expression rhs
+subtraction = expression lhs, expression rhs
+multiplication = expression lhs, expression rhs
+division = expression lhs, expression rhs
 exponentiation = expression base, expression power
+
+conjunction = expression lhs, expression rhs
+disjunction = expression lhs, expression rhs
 
 group = expression inside

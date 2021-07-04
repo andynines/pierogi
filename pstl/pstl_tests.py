@@ -21,7 +21,7 @@ class ParserTest(unittest.TestCase):
                          {"expressions": "std::vector<expression>"})
 
     def test_complete_parsing(self):
-        self.assertEqual(pstl.make_field_dict("""
+        self.assertEqual(pstl.make_source_dict("""
             negation = expression operand
             binary = expression lhs, token op, expression rhs
             call = std::string name, list args
