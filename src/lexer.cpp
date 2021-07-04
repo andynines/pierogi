@@ -11,27 +11,48 @@ token::token(token_type type, std::string lexeme, types::value value, int line) 
 }
 
 struct lexer_state {
-    source_reader::source_reader_interface& read_head;
+    std::string source;
     errors::reporter_interface& error_reporter;
     std::vector<token> tokens;
-    std::stringstream lexeme;
     int line = 1;
+    size_t lexeme_start_index = 0, current_char_index = 0;
 
-    lexer_state(source_reader::source_reader_interface& source,
-                         errors::reporter_interface& error_reporter) :
-        read_head(source), error_reporter(error_reporter) {
+    lexer_state(std::string source,
+                errors::reporter_interface& error_reporter) :
+        source(std::move(source)), error_reporter(error_reporter) {
+    }
+    
+    [[nodiscard]] bool at_end() const {
+        return current_char_index >= source.size();
+    }
+    
+    char consume_current() {
+        if (at_end()) return '\0';
+        return source[current_char_index++];
+    }
+    
+    [[nodiscard]] char peek_current() const {
+        if (at_end()) return '\0';
+        return source[current_char_index];
+    }
+
+    [[nodiscard]] char peek_next() const {
+        if (current_char_index + 1 >= source.size()) return '\0';
+        return source[current_char_index + 1];
+    }
+
+    [[nodiscard]] std::string get_current_lexeme() const {
+        return source.substr(lexeme_start_index, current_char_index - lexeme_start_index);
     }
 
     void lex_tokens() {
-        while (!read_head.at_end()) lex_next_token();
+        while (!at_end()) lex_next_token();
         tokens.emplace_back(token_type::EOF_, "", std::nullopt, line);
     }
 
     void lex_next_token() {
-        lexeme.str(std::string());
-        lexeme.clear(); // TODO: determine if this line is necessary
-        char c = read_head.consume_current();
-        lexeme << c;
+        lexeme_start_index = current_char_index;
+        char c = consume_current();
         switch (c) {
         case '\\':
             add_token(token_type::BACKSLASH);
@@ -95,8 +116,8 @@ struct lexer_state {
             line++;
             break;
         case '#':
-            while (read_head.peek_current() != '\n' && !read_head.at_end())
-                read_head.consume_current();
+            while (peek_current() != '\n' && !at_end())
+                consume_current();
             break;
         case '"':
             // TODO: Recognize single-quoted strings too
@@ -108,7 +129,7 @@ struct lexer_state {
             } else if (is_alphabetic(c)) {
                 consume_word();
             } else {
-                error_reporter.report(errors::error_type::UNRECOGNIZED_CHARACTER, lexeme.str());
+                error_reporter.report(errors::error_type::UNRECOGNIZED_CHARACTER, get_current_lexeme(), line);
             }
         }
 
@@ -123,39 +144,37 @@ struct lexer_state {
     }
 
     bool consume_current_if_matches(char expected) {
-        if (read_head.at_end() || read_head.peek_current() != expected) return false;
-        read_head.consume_current();
+        if (at_end() || peek_current() != expected) return false;
+        consume_current();
         return true;
     }
 
     void consume_string() {
-        while (read_head.peek_current() != '"') {
-            if (read_head.at_end()) {
-                error_reporter.report(errors::error_type::UNTERMINATED_STRING, lexeme.str());
+        while (peek_current() != '"') {
+            if (at_end()) {
+                error_reporter.report(errors::error_type::UNTERMINATED_STRING, get_current_lexeme(), line);
                 return;
             }
-            else if (read_head.peek_current() == '\n') line++;
-            lexeme << read_head.consume_current();
+            else if (peek_current() == '\n') line++;
+            consume_current();
         }
-        lexeme << read_head.consume_current(); // Consume closing '"'
-        types::string contents = lexeme.str();
-        contents = contents.substr(1, contents.size() - 2);
-        add_token(token_type::STRING, lexeme.str(), contents);
+        consume_current(); // Consume closing '"'
+        std::string lexeme = get_current_lexeme();
+        std::string contents = lexeme.substr(1, lexeme.size() - 2);
+        add_token(token_type::STRING, lexeme, contents);
     }
 
     void consume_number() {
-        bool dot_seen = false;
-        while (is_digit(read_head.peek_current()))
-            read_head.consume_current();
-        if (read_head.peek_current() == '.' && is_digit(read_head.peek_next())) {
-            dot_seen = true;
-            read_head.consume_current(); // Consume '.'
-            while (is_digit(read_head.peek_current()))
-                read_head.consume_current();
+        while (is_digit(peek_current()))
+            consume_current();
+        if (peek_current() == '.' && is_digit(peek_next())) {
+            consume_current(); // Consume '.'
+            while (is_digit(peek_current()))
+                consume_current();
         }
-        types::number content;
-        //if (dot_seen) content = std::stold(lexeme.str());
-        add_token(token_type::NUMBER);
+        const std::string lexeme = get_current_lexeme();
+        types::number value = std::stold(lexeme);
+        add_token(token_type::NUMBER, lexeme, value);
     }
 
     void consume_word() {
@@ -167,8 +186,8 @@ struct lexer_state {
             {"false", token_type::FALSE},
             {"nil", token_type::NIL}
         };
-        while (is_alphanumeric(read_head.peek_current())) lexeme << read_head.consume_current();
-        auto it = keywords.find(lexeme.str());
+        while (is_alphanumeric(peek_current())) consume_current();
+        auto it = keywords.find(get_current_lexeme());
         add_token(it != keywords.end() ? it->second : token_type::IDENTIFIER);
     }
 
@@ -187,7 +206,7 @@ struct lexer_state {
     }
 };
 
-std::vector<token> tokenize(source_reader::source_reader_interface& source,
+std::vector<token> tokenize(const std::string& source,
                             errors::reporter_interface& error_reporter) {
     lexer_state lexer(source, error_reporter);
     lexer.lex_tokens();

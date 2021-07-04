@@ -1,7 +1,6 @@
 #ifndef PIEROGI_LEXER_HPP
 #define PIEROGI_LEXER_HPP
 
-#include "source_reader.hpp"
 #include "types.hpp"
 #include "errors.hpp"
 
@@ -60,7 +59,7 @@ struct token {
 	token(token_type type, std::string lexeme, types::value value, int line);
 };
 
-std::vector<token> tokenize(source_reader::source_reader_interface& source,
+std::vector<token> tokenize(const std::string& source,
 							errors::reporter_interface& error_reporter);
 
 } // namespace pierogi::lexer

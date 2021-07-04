@@ -13,13 +13,13 @@ enum class error_type {
 
 class reporter_interface {
 public:
-    virtual void report(error_type type, const std::string& near_lexeme) = 0;
+    virtual void report(error_type type, const std::string& near_lexeme, int line) = 0;
 };
 
 // TODO: Move this class up to the interpreter's level
 class console_reporter : public reporter_interface {
 public:
-	void report(error_type type, const std::string& near_lexeme) override;
+	void report(error_type type, const std::string& near_lexeme, int line) override;
 };
 
 } // namespace pierogi::errors

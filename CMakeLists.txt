@@ -3,6 +3,7 @@ project(pierogi)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra")
+#set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS}") # TODO: Turn on optimizations, etc.
 
 set(TEST_SRC_DIR "${CMAKE_SOURCE_DIR}/test")
 file(GLOB TEST_SRC CONFIGURE_DEPENDS "${TEST_SRC_DIR}/*")
