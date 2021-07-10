@@ -4,6 +4,7 @@ true_boolean
 false_boolean
 number 						| types::number value
 string 						| types::string value
+list						| std::vector<expression> contents
 identifier 					| std::string name
 
 arithmetic_negation 		| expression inside
@@ -34,3 +35,4 @@ group 						| expression inside
 definition 					| std::string symbol, expression value
 
 function 					| std::vector<std::string> parameters, std::vector<expression> body
+call						| expression callee, std::vector<expression> arguments

@@ -91,13 +91,15 @@ def generate_node_pointer_type_list(node_types: List[str]) -> str:
     return ", ".join(node_types)
 
 
-def generate_visitor_methods(node_types: List[str]) -> str:
+def generate_visitor_methods(node_pointer_types: List[str]) -> str:
     method_template = "virtual T operator()(const {}& e) {{ return T{{}}; }}"
-    methods = [method_template.format(node_type) for node_type in node_types]
+    methods = [method_template.format(node_pointer_type)
+               for node_pointer_type in node_pointer_types]
     return "\n    ".join(methods)
 
 
 def generate_constructor_arguments(node_type: str, source_dict: Dict[str, Dict[str, str]]) -> str:
+    # TODO: follow Clang's suggestions of using std::move
     field_type_dict = source_dict[node_type]
     fields = ["const {1}& {0}".format(field_name, field_type) for field_name, field_type in field_type_dict.items()]
     return ", ".join(fields)
@@ -153,6 +155,6 @@ if __name__ == "__main__":
             forward_declarations=generate_forward_declarations(node_types),
             pointer_type_aliases=generate_pointer_type_aliases(node_types, node_pointer_types),
             all_node_pointer_types=generate_node_pointer_type_list(node_pointer_types),
-            visitor_methods=generate_visitor_methods(node_types),
+            visitor_methods=generate_visitor_methods(node_pointer_types),
             class_definitions=generate_class_definitions(node_types, source_dict)
         ))
